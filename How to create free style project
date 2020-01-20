@@ -8,8 +8,10 @@ Enable project-based security
   Inheritance Strategy: Inherit permissions from parent ACL
 block build if certain jobs are running
 
+
 configure block level
   block on global level
+  
 
 configure queue scaning
   disable queue checking 
@@ -17,6 +19,7 @@ discard old builds
     strategy: log rotation
     max # of build to keep: 400
     gitlab connection : cinagitlab
+    
 
 Job Notifications
 This project is parameterized
@@ -26,6 +29,7 @@ This project is parameterized
     ....
 Restrict where this project can be run
     label_expression: linu_ciscpcd43560
+    
 
 Source code Management
   Git
@@ -37,7 +41,9 @@ Source code Management
       URL: git@git.domain.com:project_name/job_name.git
       version:1.0
  
+ 
 Build Triggers
+
 
 Build Environment
 Delete workspace before build starts
@@ -88,6 +94,7 @@ Build
           "verbosity": 2
         }
        
+
 
 Post-build Actions
 
