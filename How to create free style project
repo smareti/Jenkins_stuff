@@ -94,7 +94,16 @@ Build
           "verbosity": 2
         }
        
-
+or
+Build
+    Execute Shell
+      Command 
+              #for i in ${cloudera_env}
+              #do
+              ansible-playbook -vv site.yml  --extra-vers "hadoop_user=${hadoop_user} hadoop_password=${hadoop_password} cloudera_env=${cloudera_env} tls_flag={tls_flag} keystr_loc=${keystr_loc} hbase_rpc=${hbase_rpc}"
+              #done
+              
+             
 
 Post-build Actions
 
