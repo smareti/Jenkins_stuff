@@ -1,1 +1,83 @@
-sf
+Q. How to Promote builds when trigger builds on other projects? When Build Job A, it will go to manual approval and then trigger Job B
+
+Go to Jenkins page --> New Item --> Job_A --> select free style project (copy from [Job_B]) --> Ok
+
+General
+Description
+Enable project-based security
+  Inheritance Strategy: Inherit permissions from parent ACL
+block build if certain jobs are running
+
+
+configure block level
+  block on global level
+
+
+configure queue scaning
+  disable queue checking 
+discard old builds 
+    strategy: log rotation
+    max # of build to keep: 400
+    gitlab connection : cinagitlab
+
+
+Job Notifications
+Promote builds when....
+  Promoteion Process
+      Name: Job_A approval
+      Icon: Gold Star
+    Criteria
+      Only when manually approved
+        Approves : my_id, manager_id
+    Promotion enviornment
+    Actions
+      Trigger/call builds on other projects
+        Build Triggers
+          Projects to build: Job_B,
+          Add parameters
+            current build parameters
+            
+This project is parameterized
+  validating string parameter
+    name: user_story
+    regular expression: ^(US\d{6})$
+    ....
+Restrict where this project can be run
+    label_expression: linu_ciscpcd43560
+
+
+Source code Management
+  None
+
+
+Build Triggers
+
+
+Build Environment
+Delete workspace before build starts
+Add timestamps to the console output
+
+
+Build
+       
+
+Post-build Actions
+E-mail notification
+  Recipients: cnu@domain.com
+  send email for every unstable build
+Editable email notification
+  Project Recipient List: cnu@domain.com
+  Project Reply-To List: $DEFAULT_REPLYTO
+  Default content: Default content type
+  Default Subject: Subject
+  Default content: 
+          <mail body>
+          if below input parameters appears to be valid, please approve job by click on link:
+          https://jenkins.domain.com:8080/view/project_name/job/job_name/$BUILD_NUMBER/promotion/
+          
+          USER STORY : $user_story
+          ....
+
+
+Save
+
