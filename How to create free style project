@@ -1,0 +1,4 @@
+Q. How to create free style project in Jenkins?
+
+Go to Jenkins page --> New Item --> select free style project (copy from [existing project]) --> Ok
+
