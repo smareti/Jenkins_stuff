@@ -76,7 +76,7 @@ Editable email notification
           https://jenkins.domain.com:8080/view/project_name/job/job_name/$BUILD_NUMBER/promotion/
           
           USER STORY : $user_story
-          ....
+          ......
 
 
 Save
