@@ -1,4 +1,95 @@
 Q. How to create free style project in Jenkins?
 
-Go to Jenkins page --> New Item --> select free style project (copy from [existing project]) --> Ok
+Go to Jenkins page --> New Item --> job_name --> select free style project (copy from [existing project]) --> Ok
 
+General
+Description
+Enable project-based security
+  Inheritance Strategy: Inherit permissions from parent ACL
+block build if certain jobs are running
+
+configure block level
+  block on global level
+
+configure queue scaning
+  disable queue checking 
+discard old builds 
+    strategy: log rotation
+    max # of build to keep: 400
+    gitlab connection : cinagitlab
+
+Job Notifications
+This project is parameterized
+  validating string parameter
+    name: user_story
+    regular expression: ^(US\d{6})$
+    ....
+Restrict where this project can be run
+    label_expression: linu_ciscpcd43560
+
+Source code Management
+  Git
+    Repositories
+      Repository URL : git@git.domain.com:project_name/job_name.git
+    Branches to build
+      Branch Specifier (blank for 'any'): */master
+    Repository browser: gitlab
+      URL: git@git.domain.com:project_name/job_name.git
+      version:1.0
+ 
+Build Triggers
+
+Build Environment
+Delete workspace before build starts
+Mask passwords and regexes (and enable global passwords)
+Abort the build if it's stuck
+  Time-out strategy: Absolute
+    Timeout minutes: 10
+Add timestamps to the console output
+Inject environment variables to the build process
+Evaluated Groovy script
+          //Using StringBuilder to build out final string for shell args
+          def pipelineString = new StringBuilder()
+          
+          //Create empty map to hold all values
+          def genMap = [:]
+          
+          //Evaluate environment variable to determine inv_tag and cpcprojectnum, then put into genMap
+          if (Environment.equals('DEV')){genMap.put("inv_tag","hadoopEdgeNode_1653940643_dev");genMap.put("CPCPROJECTNUM","3330")}
+          
+          //Evaluate Jenkins job variables and append to pipelineString StringBuilder object
+          if (user_story != "){pipelineString.append("--user_story ${user_story} ")}
+          
+          //Determine if pipelineString is not blank. It then puts shell_args into genMap
+          if (pipelineString.toString() != ") {genMap.put("shell_args", "${pipelineString}".toString().trim())}
+          
+          //Return genMap to that Jenkins may turn it into envirment variables. Only one map can be retured.
+          return genMap
+          
+
+Build
+  CPC Project Execute
+    CPC Base URL : https://sysmphony.domain.com
+    CPC Project ID: ${CPCPROJECTNAME}
+    CPC Username: ${CPC_Username}
+    CPC Password: ${INTERNALPASS}
+    CPC Ansible Execute JsonBody: 
+        {
+          "inventoryTag": "${inv_tag}",
+          "extraVars":{
+              "CPCPROJECTNUM": "${CPCPROJECTNUM}",
+              "CPC_Username": "${CPC_Username}",
+              "Shell_args": "${shell_args}"
+          },
+          "filename": "site.yml",
+          "gitBranch": "master",
+          "gitLink": "git@git.domain.com:project_name/job_name.git"
+          "ansibleVersion": "2.2.1",
+          "verbosity": 2
+        }
+       
+
+Post-build Actions
+
+
+Save
